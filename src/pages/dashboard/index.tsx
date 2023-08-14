@@ -40,7 +40,7 @@ export default function Dashboard(){
                 </Card>             
               </Link>
             </GridItem>
-            {user.cargo === 'admin' && (
+            {user?.cargo === 'admin' && (
                   <GridItem >
                   <Link href='/compra'>
                   <Card bg='gray.200'>

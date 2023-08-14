@@ -5,15 +5,14 @@ Center,
 Heading,
 Input,
 Button,
-Select
-
+Select,
 }from '@chakra-ui/react'
 
 import { AuthContext } from "../../context/AuthContext"
 import { useContext, useState, useEffect, FormEvent } from "react"
 import { canSSRAuth } from "../../utils/canSSRAuth"
 
-
+import { Sidebar } from "../../components/Sidebar"
 
 
 export default function Funcionarios(){
@@ -54,6 +53,7 @@ export default function Funcionarios(){
         <Head>
         <title>Funcionarios - mercaPop</title>
         </Head>
+        <Sidebar>
         <Flex justifyContent='center' alignItems='center' direction='column' bg='background' height='100vh'>
         <Center>
       
@@ -105,6 +105,7 @@ export default function Funcionarios(){
         </Flex>
       
         </Flex>
+        </Sidebar>
         </>
     )
 }

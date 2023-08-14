@@ -16,14 +16,42 @@ import {
     Center
 
 }from '@chakra-ui/react'
-import {FaCashRegister} from 'react-icons/fa'
+
+import {FiMenu} from 'react-icons/fi'
 import {IconType} from 'react-icons'
 import Link from "next/link";
+export const Sidebar = ({children, LinkItens}: {children: ReactNode, LinkItens?: Array<Links>})=>{
+    const {isOpen, onClose, onOpen} = useDisclosure()
 
-export const Sidebar = ()=>{
     return (
         <Box minH='100vh' background='gray.200' >
+            <SidebarContent
+            LinkItens={LinkItens}
+            onClose={()=>onClose}
+            display={{ base: 'none', md: 'block'}}
+           p={4}
+            />
+            <Drawer
+             onClose={()=> onClose}
+            autoFocus={false}
+            isOpen={isOpen}
+            placement="right"
+            returnFocusOnClose={false}
+            onOverlayClick={onClose}
+            size='full'
 
+            >
+                <DrawerContent>
+                    <SidebarContent onClose={onClose} LinkItens={LinkItens}/>
+                </DrawerContent>
+            </Drawer>
+
+            <MobileNav display={{base: 'flex' , md: 'none'}} onOpen={onOpen}/>
+            <Box
+            ml={{base: 0, md: 60}}
+            >
+                {children}
+            </Box>
         </Box>
     )
 }
@@ -36,29 +64,30 @@ interface Links  {
 
 interface SidebarProps extends BoxProps{
     onClose: ()=> void
-    LinkItens: Array<Links>
+    LinkItens?: Array<Links>
 }
 
-const SidebarContent = ({onClose, LinkItens,...rest}: SidebarProps)=>{
+const SidebarContent = ({onClose,LinkItens,...rest}: SidebarProps)=>{
  return (
     <Box
-    bg='gray.200'
+    bg='gray.300'
     w={{base: "full", md: 60}}
     position='fixed'
     h='full'
     {...rest}
     >
     <Flex alignItems='center' h='20' justifyContent='space-between' mx='8'>
-       <Flex>
+       <Flex >
        <Link href='/dashboard'>
         <Center cursor='pointer' mb={4}>
-            <Heading color='primary' size='3xl'>MercaPOP</Heading>
+            <Heading color='primary' size='lg'>MercaPOP</Heading>
         </Center>
-        <CloseButton display={{base: 'flex', md: 'none' }} onClick={onClose}/>
+       
         </Link>
+         <CloseButton mr='auto' display={{base: 'flex', md: 'none' }} onClick={onClose}/>
        </Flex>
-   </Flex>    
-    {LinkItens.map(l=>(
+   </Flex>   
+    {LinkItens?.map(l=>(
             <NavBarItem icon={l.icon} route={l.route} key={l.name}>{l.name}</NavBarItem>
     ))}
 
@@ -80,6 +109,7 @@ const NavBarItem = ({icon, children, route}:NavItemProps)=>{
         alignItems='center'
         p={4}
         mx={4}
+        fontWeight='bold'
         borderRadius='lg'
         role='group'
         cursor='poiner'
@@ -87,7 +117,7 @@ const NavBarItem = ({icon, children, route}:NavItemProps)=>{
          {icon && (
             <Icon
             mr={4}
-            fontSize='16'
+            fontSize='18'
             as={icon}
             />
             
@@ -96,5 +126,31 @@ const NavBarItem = ({icon, children, route}:NavItemProps)=>{
         </Flex>
 
         </Link>
+    )
+}
+
+interface MobileProps extends FlexProps{
+    onOpen: ()=> void
+}
+
+const MobileNav = ({onOpen, ...rest}: MobileProps)=>{
+    return (
+        <Flex
+        ml={{base: 0, md:60 }}
+        px={{base: 4 , md: 24}}
+        height='20'
+        alignItems='center'
+        bg='gray.400'
+        borderBottomWidth='1px'
+        justifyContent='flex-start'
+        {...rest}
+        >
+        <IconButton
+        variant='outline'
+        onClick={onOpen}
+        aria-label="open menu"
+        icon={<FiMenu/>}
+        />
+        </Flex>
     )
 }
