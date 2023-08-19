@@ -36,7 +36,7 @@ export default function CreateProduct ({marca, cod_categoria}: CreateProductProp
 
 
     const [name, setName] = useState("")
-    const [marcas, setMarcas] = useState(marca[0].marca.cod)
+    const [marcas, setMarcas] = useState(marca[0]?.marca?.cod)
     async function handleProduct(e: FormEvent){
         e.preventDefault()
         try{

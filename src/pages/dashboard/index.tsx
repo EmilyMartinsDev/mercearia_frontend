@@ -15,9 +15,34 @@ import Link from "next/link";
  import {FaDonate , FaCartPlus, FaUsers, FaTruckMoving, FaUserAlt, FaRegFileAlt} from 'react-icons/fa'
  import {FiPackage} from 'react-icons/fi'
 import { canSSRAuth } from "../../utils/canSSRAuth";
+import { setupApiClient } from "../../services/api";
+import { useState } from "react";
+import Router from "next/router";
+
 export default function Dashboard(){
+    const[cod_compra, setCod_compra] = useState("")
+
+
+    async function handleCompra() {
+        const api = setupApiClient()
+
+        try{
+            const compraResponse = await api.post("/compra", {
+                cod_fornecedor: "nao finalizada"
+            })
+            alert("cadastrado com sucesso")
+           Router.push(`/compra/${compraResponse?.data?.cod}`)
+
+        }catch(err){
+            console.log(err)
+        }
+    }
     
+  
+
+
     const {user} = useContext(AuthContext)
+
     console.log(user?.cargo)
     return (
         <>
@@ -41,9 +66,9 @@ export default function Dashboard(){
               </Link>
             </GridItem>
             {user?.cargo === 'admin' && (
-                  <GridItem >
-                  <Link href='/compra'>
-                  <Card bg='gray.200'>
+                  <GridItem cursor='pointer' >
+                
+                  <Card bg='gray.200' onClick={handleCompra}>
                         <CardHeader>
                             <Flex h={100} w={200} justifyContent='center' alignItems='center'>
                                 <FaCartPlus size={100}></FaCartPlus>
@@ -53,7 +78,7 @@ export default function Dashboard(){
                             <Heading size='md'>Compra</Heading>
                         </CardBody>
                     </Card>             
-                  </Link>
+               
                 </GridItem>
             )}
             {user?.cargo === 'admin' && (
